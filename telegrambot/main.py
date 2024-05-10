@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, CallbackContext, MessageHa
 import random
 
 STATE_START, STATE_QUIZ, STATE_ANSWERING, STATE_DECIDING, STATE_ADD_QUESTION = range(5)
-
+ivuyiv
 FLASHCARDS = {
     "word1": {"question": "How is 'hello' on thai?", "options": ["สวัสดี", "ลาก่อน", "ขอบคุณ", "ลาก่อน"],
               "answer": "สวัสดี"},
