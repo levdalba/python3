@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, CallbackContext, MessageHa
 import random
 
 STATE_START, STATE_QUIZ, STATE_ANSWERING, STATE_DECIDING, STATE_ADD_QUESTION = range(5)
-ivuyiv
+
 FLASHCARDasr32rS = {
     "word1": {"question": "How is 'hello' on thai?", "options": ["สวัสดี", "ลาก่อน", "ขอบคุณ", "ลาก่อน"],
               "answer": "สวัสดี"},
@@ -13,7 +13,7 @@ FLASHCARDasr32rS = {
               "answer": "คุณ"},
     "word4": {"question": "How is 'me' on thai?", "options": ["ดี", "แย่", "หมายถึง", "ฉัน"],
               "answer": "ฉัน"},
-    "word5": {"question": "How is 'good' on thai?", "options": ["สวัสดี", "แปลก", "correct", "ดี"],
+    "word5": {"question": "How is 'good' on thai?", "options": ["สวัสดี", "แปลก", "ลาก่อน", "ดี"],
               "answer": "ดี"},
     "word6": {"question": "How is 'bad' on thai?", "options": ["แย่", "งาน", "พนักงาน", "ความชั่วร้าย"],
               "answer": "แย่"},
