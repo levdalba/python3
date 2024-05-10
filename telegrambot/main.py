@@ -13,7 +13,7 @@ FLASHCARDS = {
               "answer": "คุณ"},
     "word4": {"question": "How is 'me' on thai?", "options": ["ดี", "แย่", "หมายถึง", "ฉัน"],
               "answer": "ฉัน"},
-    "word5": {"question": "How is 'good' on thai?", "options": ["สวัสดี", "แปลก", "correct", "ดี"],
+    "word5": {"question": "How is 'good' on thai?", "options": ["สวัสดี", "แปลก", "ลาก่อน", "ดี"],
               "answer": "ดี"},
     "word6": {"question": "How is 'bad' on thai?", "options": ["แย่", "งาน", "พนักงาน", "ความชั่วร้าย"],
               "answer": "แย่"},
