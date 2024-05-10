@@ -1,27 +1,40 @@
-from telegram import Update,  ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, CallbackContext, MessageHandler, filters
 import random
 
-STATE_START, STATE_QUIZ, STATE_ANSWERING, STATE_DECIDING,STATE_ADD_QUESTION = range(5)
+STATE_START, STATE_QUIZ, STATE_ANSWERING, STATE_DECIDING, STATE_ADD_QUESTION = range(5)
 
 FLASHCARDS = {
-    "word1": {"question": "Meaning of word1?", "options": ["option1", "option2", "correct", "option4"], "answer": "correct"},
-    "word2": {"question": "Meaning of word2?", "options": ["correct", "option2", "option3", "option4"], "answer": "correct"},
-    "word3": {"question": "Meaning of word1?", "options": ["option1", "option2", "correct", "option4"], "answer": "correct"},
-    "word4": {"question": "Meaning of word2?", "options": ["correct", "option2", "option3", "option4"], "answer": "correct"},
-    "word5": {"question": "Meaning of word1?", "options": ["option1", "option2", "correct", "option4"], "answer": "correct"},
-    "word6": {"question": "Meaning of word2?", "options": ["correct", "option2", "option3", "option4"], "answer": "correct"},
-    "word7": {"question": "Meaning of word1?", "options": ["option1", "option2", "correct", "option4"], "answer": "correct"},
-    "word8": {"question": "Meaning of word2?", "options": ["correct", "option2", "option3", "option4"], "answer": "correct"},
-    "word9": {"question": "Meaning of word1?", "options": ["option1", "option2", "correct", "option4"], "answer": "correct"},
-    "word10": {"question": "Meaning of word2?", "options": ["correct", "option2", "option3", "option4"], "answer": "correct"},
+    "word1": {"question": "How is 'hello' on thai?", "options": ["สวัสดี", "ลาก่อน", "ขอบคุณ", "ลาก่อน"],
+              "answer": "สวัสดี"},
+    "word2": {"question": "How is 'goodbye' on thai?", "options": ["ลาก่อน", "ขอบคุณ", "ฉัน", "คุณ"],
+              "answer": "ลาก่อน"},
+    "word3": {"question": "How is 'you' on thai?", "options": ["เรา", "คุณ", "สวัสดี", "พวกเขา"],
+              "answer": "คุณ"},
+    "word4": {"question": "How is 'me' on thai?", "options": ["ดี", "แย่", "หมายถึง", "ฉัน"],
+              "answer": "ฉัน"},
+    "word5": {"question": "How is 'good' on thai?", "options": ["สวัสดี", "แปลก", "correct", "ดี"],
+              "answer": "ดี"},
+    "word6": {"question": "How is 'bad' on thai?", "options": ["แย่", "งาน", "พนักงาน", "ความชั่วร้าย"],
+              "answer": "แย่"},
+    "word7": {"question": "How is 'thank you' on thai?", "options": ["ความชั่วร้าย", "ขอบคุณ", "ช่วย", "คุณ"],
+              "answer": "ขอบคุณ"},
+    "word8": {"question": "How is 'help' on thai?", "options": ["ช่วย", "ไม่ช่วย", "ให้", "สวัสดี"],
+              "answer": "ช่วย"},
+    "word9": {"question": "How is 'we' on thai?", "options": ["พวกเขา", "ของฉัน", "เรา", "คุณ"],
+              "answer": "เรา"},
+    "word10": {"question": "How is 'one' on thai?", "options": ["ศูนย์", "หนึ่ง", "สอง", "สี่"],
+               "answer": "หนึ่ง"},
 }
+
 
 async def start(update: Update, context: CallbackContext) -> None:
     keyboard = [['Yes', 'No']]
     reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-    await update.message.reply_text('Welcome to the Flashcard Quiz Bot! Do you want to start the quiz?', reply_markup=reply_markup)
+    await update.message.reply_text('Welcome to the Flashcard Quiz Bot! Do you want to start the quiz?',
+                                    reply_markup=reply_markup)
     context.user_data['state'] = STATE_START
+
 
 async def handle_message(update: Update, context: CallbackContext):
     text = update.message.text.lower()
@@ -36,7 +49,8 @@ async def handle_message(update: Update, context: CallbackContext):
         elif text == 'no':
             keyboard = [['Add a Question', 'Good Bye']]
             reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-            await update.message.reply_text('Would you like to add a question or say goodbye?', reply_markup=reply_markup)
+            await update.message.reply_text('Would you like to add a question or say goodbye?',
+                                            reply_markup=reply_markup)
             context.user_data['state'] = STATE_DECIDING
         else:
             await update.message.reply_text('Please click Yes or No.')
@@ -56,15 +70,17 @@ async def handle_message(update: Update, context: CallbackContext):
             await ask_question(update, context)
         except ValueError:
             await update.message.reply_text('Please select a valid number of questions.')
-    
+
     elif current_state == STATE_ADD_QUESTION:
         if 'temp_question' not in context.user_data:
             context.user_data['temp_question'] = {'question': text}
-            await update.message.reply_text('Please enter the options separated by commas (e.g., option1, option2, correct, option4):')
+            await update.message.reply_text(
+                'Please enter the options separated by commas (e.g., option1, option2, correct, option4):')
         elif 'options' not in context.user_data['temp_question']:
             options = text.split(',')
             context.user_data['temp_question']['options'] = options
-            await update.message.reply_text('Which one is the correct answer? Please type exactly as you listed in options.')
+            await update.message.reply_text(
+                'Which one is the correct answer? Please type exactly as you listed in options.')
         else:
             correct_answer = text
             if correct_answer in context.user_data['temp_question']['options']:
@@ -74,7 +90,8 @@ async def handle_message(update: Update, context: CallbackContext):
                 context.user_data.pop('temp_question', None)
                 context.user_data['state'] = STATE_START  # Reset to start
             else:
-                await update.message.reply_text('The correct answer must match one of the options. Please re-enter the correct answer.')
+                await update.message.reply_text(
+                    'The correct answer must match one of the options. Please re-enter the correct answer.')
 
 
     elif current_state == STATE_DECIDING:
@@ -89,7 +106,7 @@ async def handle_message(update: Update, context: CallbackContext):
 
     elif current_state == STATE_ANSWERING:
         await handle_answer(update, context)
-       
+
 
 async def ask_question(update: Update, context: CallbackContext):
     questions = context.user_data['questions']
@@ -105,6 +122,7 @@ async def ask_question(update: Update, context: CallbackContext):
             f'Quiz complete! You answered {context.user_data["correct"]} out of {context.user_data["total"]} correctly.',
             reply_markup=ReplyKeyboardRemove())
         context.user_data.clear()
+
 
 async def handle_answer(update: Update, context: CallbackContext):
     text = update.message.text.lower()
@@ -124,11 +142,13 @@ async def handle_answer(update: Update, context: CallbackContext):
     else:
         await end_quiz(update, context)
 
+
 async def end_quiz(update: Update, context: CallbackContext):
     await update.message.reply_text(
         f'Quiz complete! You answered {context.user_data["correct"]} out of {context.user_data["total"]} correctly.',
         reply_markup=ReplyKeyboardRemove())
     context.user_data.clear()
+
 
 def main():
     TOKEN = '6731366092:AAHZNbxjzdtU0m8aC5iTKAEeocD0hdM4x1c'
@@ -137,6 +157,7 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     app.run_polling()
+
 
 if __name__ == '__main__':
     main()
