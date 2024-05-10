@@ -75,7 +75,7 @@ async def handle_message(update: Update, context: CallbackContext):
         if 'temp_question' not in context.user_data:
             context.user_data['temp_question'] = {'question': text}
             await update.message.reply_text(
-                'Please enter the options separated by commas (e.g., option1, option2, correct, option4):')
+                'Please enter the options separated by commas (e.g., option1, option2, option3, option4):')
         elif 'options' not in context.user_data['temp_question']:
             options = text.split(',')
             context.user_data['temp_question']['options'] = options
@@ -92,7 +92,6 @@ async def handle_message(update: Update, context: CallbackContext):
             else:
                 await update.message.reply_text(
                     'The correct answer must match one of the options. Please re-enter the correct answer.')
-
 
     elif current_state == STATE_DECIDING:
         if text == 'add a question':
