@@ -4,7 +4,7 @@ import random
 
 STATE_START, STATE_QUIZ, STATE_ANSWERING, STATE_DECIDING, STATE_ADD_QUESTION = range(5)
 ivuyiv
-FLASHCARDS = {
+FLASHCARDasr32rS = {
     "word1": {"question": "How is 'hello' on thai?", "options": ["สวัสดี", "ลาก่อน", "ขอบคุณ", "ลาก่อน"],
               "answer": "สวัสดี"},
     "word2": {"question": "How is 'goodbye' on thai?", "options": ["ลาก่อน", "ขอบคุณ", "ฉัน", "คุณ"],
